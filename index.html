@@ -22,11 +22,11 @@
 
         .jumbotron {
             background-image: url("summer-barbeque-feast.jpg");
-            color: aliceblue;  
+            color: aliceblue;
         }
 
-        p{
-            color: aliceblue;  
+        p {
+            color: aliceblue;
         }
     </style>
 </head>
@@ -77,6 +77,7 @@
                 }).then(function (response) {
                     var results = response.data;
                     console.log(results)
+
                     // Looping through each result item
                     for (var i = 0; i < results.length; i++) {
 
@@ -84,7 +85,7 @@
                         // Creating a div to hold the food
                         var foodDiv = $("<div>");
                         var rating = results.rating;
-                        console.log(rating)
+
 
 
                         // Creating a paragraph tag with the result item's rating
@@ -94,33 +95,41 @@
                         // Creating and storing an image tag
                         var foodImage = $("<img>");
                         // Setting the src attribute of the image to a property pulled off the result item
-                        var gifStill= results[i].images.fixed_height_still.url;
-                        var gifAnimate= results[i].images.fixed_height.url;
+                        var gifStill = results[i].images.fixed_height_still.url;
+                        var gifAnimate = results[i].images.fixed_height.url;
                         foodImage.attr("src", gifStill);
                         foodImage.attr("data-still", gifStill);
                         foodImage.attr("data-animate", gifAnimate);
+
                         foodImage.attr("data-state", "still");
+
+                        foodImage.addClass("tryThis");
                         // prepending the paragraph and image tag to the foodDiv
                         foodDiv.prepend(p);
                         foodDiv.prepend(foodImage);
 
                         // Prependng the foodDiv to the HTML page in the "#gifs-appear-here" div
                         $("#gifs-appear-here").prepend(foodDiv);
-                        $("img").on("click", function () {
-                            // The attr jQuery method allows us to get or set the value of any attribute on the HTML element
-                            var state = $(this).attr("data-state");
-                            // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-                            // Then, set the image's data-state to animate
-                            // Else set src to the data-still value
-                            if (state === "still") {
-                                $(this).attr("src", $(this).attr("data-animate"));
-                                $(this).attr("data-state", "animate");
-                            } else {
-                                $(this).attr("src", $(this).attr("data-still"));
-                                $(this).attr("data-state", "still");
-                            }
-                        });
+
                     }
+                    $(".tryThis").on("click", function () {
+
+                        // The attr jQuery method allows us to get or set the value of any attribute on the HTML element
+                        var state = $(this).attr("data-state");
+                        console.log(state);
+                        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+                        // Then, set the image's data-state to animate
+                        // Else set src to the data-still value
+                        if (state === "still") {
+                            $(this).attr("src", $(this).attr("data-animate"));
+                            $(this).attr("data-state", "animate");
+                            console.log("Changed to animate", state);
+                        } else {
+                            $(this).attr("src", $(this).attr("data-still"));
+                            $(this).attr("data-state", "still");
+                            console.log("Changed to still", state)
+                        }
+                    });
                 });
 
             }
@@ -154,6 +163,7 @@
                 event.preventDefault();
                 // This line grabs the input from the textbox
                 var food = $("#food-input").val().trim();
+                $("#food-form").trigger("reset");
 
                 // Adding food from the textbox to the array
                 Topics.push(food);
@@ -164,6 +174,7 @@
 
             // Adding a click event listener to all elements with a class of "food-btn"
             $(document).on("click", ".food-btn", displayFoodInfo);
+
 
             // Calling the renderButtons function to display the intial buttons
             renderButtons();
